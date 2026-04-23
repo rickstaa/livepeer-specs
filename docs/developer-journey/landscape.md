@@ -1,4 +1,4 @@
-# Prior Art: Discovery → Playground → Integrate
+# Landscape: Discovery → Playground → Integrate
 
 > [!WARNING]
 > **Draft — AI-assisted, not fully verified.** This document was produced with AI assistance and has not been fully fact-checked. Details (pricing, SDK shapes, URLs, behaviour) may be inaccurate or out of date. Verify against the linked sources before relying on any specific claim.

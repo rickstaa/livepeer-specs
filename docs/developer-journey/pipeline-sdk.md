@@ -4,7 +4,7 @@
 
 The Pipeline SDK is the developer-facing interface for deploying AI capabilities to the Livepeer network. Developers write a standard Python class; the SDK handles trickle transport, protobuf serialisation, Docker packaging, and orchestrator registration. Livepeer's equivalent of Replicate's `cog push` or Chutes' `chutes deploy` — with first-class support for real-time video that those platforms don't offer.
 
-Deploy-side counterpart to the [Client SDK](./client-sdk.md). Comparisons to other platforms live in [prior-art.md](./prior-art.md).
+Deploy-side counterpart to the [Client SDK](./client-sdk.md). Comparisons to other platforms live in [landscape.md](./landscape.md).
 
 ## Main interfaces
 

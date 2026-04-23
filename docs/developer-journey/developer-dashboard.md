@@ -4,7 +4,7 @@ An opinionated, community-owned surface that takes a developer from **discoverin
 
 The Developer Dashboard is not a new piece of infrastructure. It is the one surface that ties together the components Livepeer engineering has shipped over the last months — the Livepeer Cloud data work, the remote signer, the client SDK, upcoming runner SDK — into a single funnel a developer can walk end-to-end.
 
-> See also: [Prior art — how other ecosystems do this](./prior-art.md). Replicate, Modal, Chutes, Prime Intellect, Fal.ai.
+> See also: [Landscape — how other ecosystems do this](./landscape.md). Replicate, Modal, Chutes, Prime Intellect, Fal.ai.
 
 ## Agent-first by default
 
