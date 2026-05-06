@@ -1,6 +1,6 @@
 # Pipeline SDK
 
-*Status: design validated against Replicate / Modal / Chutes / AI-Runner / Scope; BYOC contract alignment proposed, not yet implemented. MVP is the `runner/` module (~1,100 lines) plus the go-livepeer BYOC changes below.*
+*Status: design validated against Cog (Replicate) / Modal / Chutes / AI-Runner / Scope / [pytrickle](https://github.com/livepeer/pytrickle). Container contract matches the existing go-livepeer BYOC endpoints (no go-livepeer changes required); pytrickle is adopted as the streaming runtime. MVP is a thin `livepeer-pipeline` package that wraps pytrickle for streaming and adds the Cog-equivalent batch + schema layer.*
 
 The Pipeline SDK is the developer-facing interface for deploying AI capabilities to the Livepeer network. Developers write a standard Python class; the SDK handles trickle transport, protobuf serialisation, Docker packaging, and orchestrator registration. Livepeer's equivalent of Replicate's `cog push` or Chutes' `chutes deploy` — with first-class support for real-time video that those platforms don't offer.
 
@@ -46,14 +46,17 @@ Then: `livepeer push my_pipeline.py`. Done.
 | `livepeer prepare <file>` | Download model weights (usually run inside Docker build) |
 | `livepeer push <file>` | Package, build, and publish the container to the network |
 
-**Endpoints the container exposes automatically** (builder never writes these):
+**Endpoints the container exposes automatically** (builder never writes these). Paths match the existing go-livepeer BYOC contract so SDK-built containers and existing BYOC containers ([pytrickle](https://github.com/livepeer/pytrickle), naap's [`livepeer-inference-adapter`](https://github.com/livepeer/naap/tree/main/containers/livepeer-inference-adapter), custom Flask servers) run on the same orchestrator without flag-day migration:
 
 | Endpoint | Purpose | Consumer |
 |---|---|---|
+| `GET /` | Discovery doc — schema URL, capability ID, version, supported transports | Orchestrator, Dashboard |
 | `GET /health` | `{"status": "ready \| loading \| error \| idle"}` | Orchestrator readiness check |
+| `GET /openapi.json` | OpenAPI Schema for inputs / outputs (also embedded as Docker image label, see [Schema delivery](#schema-delivery)) | Dashboard UI, agents, client-SDK snippet generation |
 | `POST /predict` | Request-response (or SSE if `predict()` yields) | Gateway job proxy |
-| `POST /stream` | Start real-time processing (`StreamPipeline` only) | BYOC orchestrator |
-| `GET /schema` | JSON Schema for inputs / outputs | Dashboard UI, agents, client-SDK snippet generation |
+| `POST /stream/start` | Start real-time processing — receives trickle URLs (`StreamPipeline` only) | BYOC orchestrator |
+| `POST /stream/stop` | Stop real-time processing | BYOC orchestrator |
+| `POST /stream/params` | Live parameter update during a stream | BYOC orchestrator |
 | `GET /pipelines` | List all registered pipelines | Multi-pipeline discovery |
 
 **Transport is chosen automatically from the class shape:**
