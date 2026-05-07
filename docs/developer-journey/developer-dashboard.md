@@ -39,7 +39,7 @@ The Dashboard is the umbrella. Each component below is substrate it reads from, 
 
 For the stats a developer cares about (*"is this capable enough for my use case? how is it already being used? what latencies and costs?"*) the Dashboard reads from the Cloud team's real-time metrics and the upgraded subgraph (gateway tracking, treasury tracking, delegator-income tracking). The same data feeds the naap operator app at [operator.livepeer.org](https://operator.livepeer.org); the Dashboard reads the same endpoint. Over time, **SDK-reported metrics** add a second, caller-side feed that cross-validates operator self-reporting and keeps the surface useful if the operator-side feed blips.
 
-Today this endpoint is centralised (naap + Cloud data infrastructure). One possible longer-term improvement would be a small aggregator container anyone can run, gossiping with peers — so the data surface doesn't disappear if any one operator does. Not committed; an illustrative direction. See [production-data.md](./production-data.md).
+Today this endpoint is centralised (naap + Cloud data infrastructure). A direction under discussion is a pull-based primitive: orchestrators expose an observation feed (heartbeat-derived) discoverable via the on-chain ServiceRegistry, with naap-api as one aggregator among many rather than the spine. The Dashboard would be one consumer of that surface, not its owner. See [production-data.md](./production-data.md) for the framing and [orchestrator-observations.md](./orchestrator-observations.md) for current notes (deferring to J0sh's forthcoming canonical spec).
 
 ### Client SDK — *playground + snippets*
 
@@ -89,7 +89,7 @@ Doing this fully decentralised from day one is possible — but materially harde
 
 Concrete current bets:
 
-- **Data endpoint** is naap + Cloud infrastructure today. Path: a small aggregator container anyone can run, maybe gossip like style synchronisation between aggregators (exact protocol undecided).
+- **Data endpoint** is naap + Cloud infrastructure today. Direction under discussion: orchestrators expose an observation feed (heartbeat-derived) discoverable via the on-chain ServiceRegistry; anyone pulls. naap-api would become one aggregator among many, not the spine. See [production-data.md](./production-data.md) for the framing and [orchestrator-observations.md](./orchestrator-observations.md) for current notes (deferring to J0sh's forthcoming canonical spec).
 - **Payment clearinghouse** is one community-hosted signer today. Path: John's work → multiple registered signers + Dashboard token-routing → full permissionless signer registration.
 - **Catalog sorting** uses observable signals — reliability, request volume, latency — rather than a Foundation-curated tier. Any capability reachable through a conformant Pipeline SDK container is eligible; the signals do the ranking.
 
@@ -130,5 +130,5 @@ There are more but here are some open questions:
 - The exact token-routing interface between the SDK and the Dashboard API once multiple clearinghouses exist — especially failure-mode semantics when a registered signer goes offline mid-session.
 - How the Pipeline SDK's OpenAPI metadata reaches the Dashboard — push-on-publish, pull-from-orchestrator, or a dedicated registry? The opinionated-container model pushes this toward pull, but the tradeoff isn't decided.
 - Which observable signals are load-bearing for catalog ranking — reliability, request volume, latency, user-ratings? What's the weighting, and how do we avoid new capabilities being invisible by definition (cold-start problem)?
-- Exact shape of the aggregator-container/gossip protocol for the data surface. Out of scope for MVP; needs a deliberate design pass before building.
+- Whether the data surface evolves from the current push-based pipeline to a pull-based primitive (orchestrators expose, anyone pulls), and what the migration path looks like if so. Owned by [production-data.md](./production-data.md).
 - Whether the Dashboard ever hosts a first-party model/metadata registry layer, or keeps the container-is-registry model forever.

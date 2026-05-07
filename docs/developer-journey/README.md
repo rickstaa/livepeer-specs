@@ -38,6 +38,7 @@ Each gets its own spec in this folder. The **Developer Dashboard** is the umbrel
 - **[Pipeline SDK](./pipeline-sdk.md)** — the SDK a builder uses to package a new job type as a container that orchestrators can opt into running. Not automated run-any-code deployment; the orchestrator remains in the loop. *(spec TBD)*
 - **[Remote-signer clearinghouse](./remote-signer.md)** — payment abstraction that removes the need to run a local gateway. Paired with the client SDK, the developer partners with a signer instead. *(spec TBD)*
 - **[Production-data surface](./production-data.md)** — richer network data so a developer can judge whether Livepeer can serve their use case, and see how it's already being used. *(spec TBD)*
+  - **[Orchestrator observations](./orchestrator-observations.md)** — framing stub: why heartbeat-based registration composes with pull, plus open questions; defers to J0sh's forthcoming canonical wire-level spec.
 - **[Agent-first DevX](./agent-first-devx.md)** — the cross-cutting design principle and infrastructure (`llms.txt`, Dashboard MCP, production-data MCP) that makes every surface above legible to AI coding agents, not just humans. *(spec TBD)*
 
 ## How it fits together
